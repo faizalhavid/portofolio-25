@@ -11,14 +11,11 @@
 		if (image) {
 			return `bg-[url('${image}')] bg-cover bg-center`;
 		}
-		return '';
+		return 'bg-gray-200 dark:bg-gray-900 border border-gray-200 dark:border-gray-400';
 	};
 </script>
 
-<div
-	class={`flex flex-row gap-4 rounded-3xl border border-neutral-200 bg-white p-4 shadow-lg dark:border-neutral-700 dark:bg-neutral-800 ${bg}
-	`}
->
+<div class={`flex w-[400px] min-w-6 flex-row gap-4 rounded-3xl p-4 shadow-lg ${bg}`}>
 	<div class="flex-shrink-0">
 		{#if avatar}
 			<img src={avatar} alt="Client Avatar" class="h-16 w-16 rounded-full object-cover" />
@@ -32,18 +29,16 @@
 			<p class="text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
 		</div>
 	</div>
-	{#if externalLink}
+	<!-- {#if externalLink}
 		<a
 			href={externalLink}
 			class="ml-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
 		>
 			Visit Website
 		</a>
-	{/if}
+	{/if} -->
 	<div class="flex-1"></div>
-	<Divider className="h-full" />
 	<div class="flex items-center justify-center">
-		<p class="text-sm text-neutral-500">Client Details</p>
 		<div class="ml-2">
 			<p class="text-sm text-neutral-500">Name: {name}</p>
 			<p class="text-sm text-neutral-500">Description: {description}</p>

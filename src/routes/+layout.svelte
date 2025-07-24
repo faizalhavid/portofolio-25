@@ -3,13 +3,11 @@
 	import '../app.css';
 </script>
 
-<style>
-
-
-</style>
-
 <div class="min-h-screen overflow-x-hidden bg-white dark:bg-gray-900 dark:text-gray-100">
-<main class="px-4 max-w-screen-lg mx-auto">
-  <slot />
-</main>
+	<main class="mx-auto max-w-screen-lg px-4">
+		<slot />
+	</main>
 </div>
+
+<style>
+</style>

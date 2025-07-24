@@ -5,16 +5,18 @@
 </script>
 
 <div
-	class="relative flex h-[350px] w-full items-center justify-center bg-center"
+	class="relative z-100 mt-16 flex
+	h-[60vh] w-full items-center justify-center bg-center"
 	style="background-image: url('/pattern-1.svg');"
 >
 	<div class="mx-auto w-fit">
-		<p class="mt-4 text-6xl font-medium">CodeIt-deployIt</p>
+		<p class="text-6xl font-medium">CodeIt-deployIt</p>
 		<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
 	</div>
 </div>
-<div class="relative w-full">
-	<div class="absolute top-0 left-0 z-10 flex w-full flex-row justify-between">
+
+<div class="relative -top-25 z-0 w-full">
+	<div class="absolute -top-5 left-0 z-10 flex w-full flex-row justify-between">
 		<div class="flex flex-col gap-1">
 			<p class="text-lg font-medium">Creative-visual</p>
 			<p class="font-regular text-sm">3+ <span class="text-green-500">years-exp</span></p>
@@ -36,22 +38,25 @@
 			<p class="font-regular text-sm">3+ <span class="text-green-500">years-exp</span></p>
 		</div>
 	</div>
-	<div class="relative right-1/2 left-1/2 z-0 mr-[-50vw] ml-[-50vw] w-screen">
+	<div class="relative right-1/2 left-1/2 z-0 mt-15 mr-[-50vw] ml-[-50vw] w-screen">
 		<img
 			src="/images/main-banner.jpg"
 			alt="Main Banner"
 			class="w-full object-cover"
-			style="height: calc(100vh - 350px);"
+			style="height: calc(100vh - 400px);"
 		/>
 		<div
 			class="pointer-events-none absolute top-0 left-0 h-full w-full"
-			style="background: linear-gradient(to bottom, #111827, rgba(17,24,39,0));"
+			style="background: linear-gradient(to bottom, #111827, rgba(17,24,39,0));
+				box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7);
+			"
 		></div>
 	</div>
 </div>
+
 <div class="flex flex-row gap-4">
 	<Divider className="max-h-screen" thickness="0.25px" />
-	<div class="mt-12 flex flex-1 flex-col gap-6">
+	<div class="flex flex-1 flex-col gap-8">
 		<!-- overview -->
 		<div class="flex flex-row justify-between">
 			<p class="text-2xl font-medium">../overview</p>
@@ -63,7 +68,7 @@
 		</div>
 
 		<!-- skills -->
-		<div class="flex flex-col justify-between">
+		<div class="flex flex-col justify-between gap-2">
 			<p class="text-2xl font-medium">../skills</p>
 			<PromptContainer
 				title="Software-development"
@@ -112,22 +117,30 @@
 		</div>
 
 		<!-- clients -->
-		<div class="flex flex-col justify-between">
+		<div class="flex flex-col justify-between gap-4">
 			<p class="text-2xl font-medium">../Clients</p>
-			<ClientsCard
-				name="Client 1"
-				description="Description for Client 1"
-				externalLink="https://client1.com"
-				avatar="/images/client1.jpg"
-				image="/images/client1-bg.jpg"
-			/>
-			<ClientsCard
-				name="Client 2"
-				description="Description for Client 2"
-				externalLink="https://client2.com"
-				avatar="/images/client2.jpg"
-				image="/images/client2-bg.jpg"
-			/>
+			<div
+				class="grid w-full grid-cols-1 justify-items-center gap-12 sm:grid-cols-2 lg:grid-cols-3"
+			>
+				<ClientsCard
+					name="Client 1"
+					description="Description for Client 1"
+					externalLink="https://example.com"
+					avatar="/images/client-avatar-1.jpg"
+				/>
+				<ClientsCard
+					name="Client 2"
+					description="Description for Client 2"
+					externalLink="https://example.com"
+					avatar="/images/client-avatar-2.jpg"
+				/>
+				<ClientsCard
+					name="Client 3"
+					description="Description for Client 3"
+					externalLink="https://example.com"
+					avatar="/images/client-avatar-3.jpg"
+				/>
+			</div>
 		</div>
 	</div>
 </div>
