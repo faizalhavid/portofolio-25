@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let height: string = '250px';
+	export let height: string = 'auto';
 	export let width: string = 'auto';
 	export let color: string = 'bg-neutral-100/20';
 	export let className: string = '';
