@@ -1,7 +1,6 @@
-<script>
+<script lang="ts">
 	import ClientsCard from '$lib/components/cards/ClientCard.svelte';
 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
-	import PromptContainer from '$lib/components/cards/PromptCard.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
 	import Chip from '$lib/components/Chip.svelte';
 	import Divider from '$lib/components/Divider.svelte';
@@ -10,6 +9,7 @@
 	import Marquee from 'svelte-fast-marquee';
 	import { onMount } from 'svelte';
 	import PatternBackground from '$lib/components/PatternBackground.svelte';
+	import Terminal from '$lib/components/terminal/Terminal.svelte';
 
 	// @ts-ignore
 	let experience = [];
@@ -20,14 +20,53 @@
 		mount = true;
 		console.log(experience);
 	});
+
+	const cliData = [
+		{
+			name: 'backend',
+			perms: 'drwxr-xr-x',
+			count: 5,
+			owner: 'user',
+			group: 'group',
+			size: 4096,
+			date: 'Jul 27 12:00',
+			path: '../backend.bash',
+			stack: ['Node.js', 'Express', 'PostgreSQL'],
+			cwd: '~/backend'
+		},
+		{
+			name: 'frontend',
+			perms: 'drwxr-xr-x',
+			count: 3,
+			owner: 'user',
+			group: 'group',
+			size: 4096,
+			date: 'Jul 27 12:01',
+			path: '../frontend.bash',
+			stack: ['Svelte', 'Tailwind CSS', 'Vite'],
+			cwd: '~/frontend'
+		},
+		{
+			name: 'devops',
+			perms: 'drwxr-xr-x',
+			count: 4,
+			owner: 'user',
+			group: 'group',
+			size: 4096,
+			date: 'Jul 27 12:02',
+			path: '../devops.bash',
+			stack: ['Docker', 'CI/CD', 'Cloud Deploy'],
+			cwd: '~/devops'
+		}
+	];
 </script>
 
 <div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
 	<!-- title -->
-	<div class="px-25 z-10 flex flex-col gap-5 pt-[15rem]">
+	<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
 		<div class="mx-auto w-fit">
 			<p class="text-6xl font-medium">CodeIt-deployIt</p>
-			<p class="ml-40 mt-4 text-6xl font-medium">DesignIt-renderIt</p>
+			<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
 		</div>
 
 		<div class="flex w-full flex-row justify-between">
@@ -45,25 +84,26 @@
 		<PatternBackground className="z-0 top-0 absolute" />
 	{/if}
 	<!-- image -->
-	<div class="relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw] w-screen flex-grow">
+	<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
 		<img src="/images/main-banner.jpg" alt="Main Banner" class="h-full w-full object-cover" />
 		<div
-			class="from-primary-900 to-primary-900/0 pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b
-            "
+			class="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-primary-900 to-primary-900/0
+			"
 		></div>
 	</div>
 </div>
 
 <div class="box-border flex min-h-0 w-full max-w-[100vw] flex-row gap-4 overflow-x-auto">
 	<div
-		class="border-x-(--pattern-fg) [--pattern-fg:var(--color-gray-950)]/5 dark:[--pattern-fg:var(--color-white)]/10 col-start-2 row-span-5 row-start-1 border-x bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed max-lg:hidden"
+		class="col-start-2 row-span-5 row-start-1 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed [--pattern-fg:var(--color-gray-950)]/5 max-lg:hidden dark:[--pattern-fg:var(--color-white)]/10"
 	></div>
 	<div class="mt-15 flex w-full min-w-0 flex-col gap-10">
 		<!-- overview -->
-		<div class="flex flex-col justify-between">
+		<div class="flex h-[100vh] flex-col gap-5">
 			<p class="text-path">~/../overview</p>
+			<!-- <Divider /> -->
 			<div class="flex h-auto flex-row items-center justify-center gap-2 px-4">
-				<div class="bg-primary-700 flex w-1/2 items-center justify-center p-10">?</div>
+				<div class="flex w-1/2 items-center justify-center bg-primary-700 p-10">?</div>
 				<p class="w-1/2 flex-grow text-sm text-white/70">
 					Hi, <span class="text-highlight">I'm Zhall </span> — a passionate
 					<span class="text-highlight">Application Developer</span>
@@ -83,75 +123,35 @@
 					<span class="text-highlight">impactful digital experiences</span>.
 				</p>
 			</div>
+			<Carousel autoplay={2000} perPage={3} className="flex-grow bg-amber-200">
+				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
+				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
+				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
+				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
+				<span class="display:inline;margin-top:6rem;" slot="left-control">Left</span>
+				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
+			</Carousel>
 		</div>
 
 		<!-- skills -->
 		<div class="flex flex-col justify-between gap-2">
 			<p class="text-path">~/../skills</p>
 			<div class="flex flex-col p-4">
-				<PromptContainer
+				<Terminal
+					history={['cd software-development/ && ls -a']}
 					title="software-development.bash"
-					className="my-4"
-					command={['run ls -a backend/']}
-				>
-					<div class="rounded p-4 font-mono text-sm text-green-400 shadow-md">
-						<details class="flex flex-col text-green-400">
-							<summary class="flex cursor-pointer gap-4">
-								<span class="w-16">drwxr-xr-x</span>
-								<span class="w-6">5</span>
-								<span class="w-16">user</span>
-								<span class="w-16">group</span>
-								<span class="w-16 text-right">4096</span>
-								<span class="w-28">Jul 27 12:00</span>
-								<span class="flex-1">../backend.bash</span>
-							</summary>
-							<div class="mt-1 pl-[120px] font-mono text-green-400">
-								<ul class="relative ml-4 border-l border-green-400">
-									<li
-										class="relative pl-4 before:absolute before:left-[-1rem] before:top-[0.6rem] before:w-4 before:border-t before:border-green-400 before:content-['']"
-									>
-										Node.js
-									</li>
-									<li
-										class="relative pl-4 before:absolute before:left-[-1rem] before:top-[0.6rem] before:w-4 before:border-t before:border-green-400 before:content-['']"
-									>
-										Express
-									</li>
-									<li
-										class="relative pl-4 before:absolute before:left-[-1rem] before:top-[0.6rem] before:w-4 before:border-t before:border-green-400 before:content-['']"
-									>
-										PostgreSQL
-									</li>
-								</ul>
-							</div>
-						</details>
+					data={cliData}
+					cwd="~"
+					user="zhal"
+					host="portofolio"
+				/>
 
-						<div class="flex gap-4">
-							<span class="w-16">drwxr-xr-x</span>
-							<span class="w-6">3</span>
-							<span class="w-16">user</span>
-							<span class="w-16">group</span>
-							<span class="w-16 text-right">4096</span>
-							<span class="w-28">Jul 27 12:01</span>
-							<span class="flex-1">../frontend.bash</span>
-						</div>
-						<div class="flex gap-4">
-							<span class="w-16">drwxr-xr-x</span>
-							<span class="w-6">4</span>
-							<span class="w-16">user</span>
-							<span class="w-16">group</span>
-							<span class="w-16 text-right">4096</span>
-							<span class="w-28">Jul 27 12:02</span>
-							<span class="flex-1">../devops.bash</span>
-						</div>
-					</div>
-				</PromptContainer>
-				<PromptContainer
+				<!-- <PromptContainer
 					title="Creative-visual"
 					className="my-4"
 					command={['run ls -a creative-visual/']}
-				>
-					<!-- <div class="flex gap-2">
+				> -->
+				<!-- <div class="flex gap-2">
 					<button class={`mr-1 rounded border bg-gray-800 px-2 py-0.5 text-xs text-white`}>
 						../backend.bash
 					</button>
@@ -162,12 +162,12 @@
 						../devops.bash
 					</button>
 				</div> -->
-					<ul class="list-disc pl-5">
+				<!-- <ul class="list-disc pl-5">
 						<li>Skill 1</li>
 						<li>Skill 2</li>
 						<li>Skill 3</li>
 					</ul>
-				</PromptContainer>
+				</PromptContainer> -->
 			</div>
 		</div>
 
@@ -325,7 +325,7 @@
 	</div>
 	<!-- footer -->
 	<div
-		class="mt-15 relative left-1/2 right-1/2 z-0 ml-[-50vw] mr-[-50vw] flex w-screen flex-col items-center justify-center gap-4 p-8 text-white"
+		class="relative right-1/2 left-1/2 z-0 mt-15 mr-[-50vw] ml-[-50vw] flex w-screen flex-col items-center justify-center gap-4 p-8 text-white"
 		style="background: url('/images/footer-banner.jpg') top/cover no-repeat; height: calc(100vh - 400px);"
 	>
 		<!-- Remove the <img> tag, use only background -->

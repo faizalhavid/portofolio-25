@@ -1,5 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+    --color-primary-900: #111827;
+    --color-primary-800: #181c23; /* darker, closer to 900 */
+    --color-primary-700: #1d222a; /* darker, closer to 900 */
+    --color-primary-600: #2c3440;
+    --color-primary-500: #5a6473; /* a bit lighter for contrast */
+    --color-primary-400: #8a94a5; /* lighter, more distinct */
+    --color-primary-300: #d1d5db;
+    --color-primary-200: #e5e7eb;
+    --color-primary-100: #f3f4f6;
+    --color-primary-50: #f9fafb;
+}
+
+*{
+    font-family: 'Fira Code', monospace;
+    box-sizing: border-box;
+}
+
+.text-highlight{
+    @apply text-white/90 font-medium underline;
+}
+
+.text-highlight:hover {
+    @apply text-white/100;
+}
+
+.text-path {
+    @apply text-xl text-white/70 font-medium;
+}
+
+.text-path:hover {
+    @apply text-white/90 underline cursor-pointer;
+}
+
+
 .card-hovering {
-    @apply transition-transform duration-200 ease-in-out;
+    @apply  transition-transform duration-200 ease-in-out;
 }
 .card-hovering:hover {
     @apply cursor-pointer;

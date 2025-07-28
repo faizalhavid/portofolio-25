@@ -18,6 +18,7 @@
 	export let controls = true;
 	export let threshold = 20;
 	export let rtl = false;
+	export let className = '';
 	let currentIndex = startIndex;
 
 	/**
@@ -143,7 +144,7 @@
 	}
 </script>
 
-<div class="carousel">
+<div class={`carousel ${className}`}>
 	<div class="mask mask-left"></div>
 	<div class="mask mask-right"></div>
 	<div class="slides" bind:this={siema}>
