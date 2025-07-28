@@ -3,7 +3,7 @@
 	import '../app.css';
 </script>
 
-<div class="min-h-screen overflow-x-hidden bg-white dark:bg-gray-900 dark:text-gray-100">
+<div class="-z-1 min-h-screen overflow-x-hidden bg-white dark:bg-gray-900 dark:text-gray-100">
 	<main class="mx-auto max-w-screen-lg px-4">
 		<slot />
 	</main>
