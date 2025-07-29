@@ -69,7 +69,7 @@
 </script>
 
 <div
-	class={`wrapper pattern-bg right-1/2 left-1/2 mt-16 mr-[-50vw] ml-[-50vw] h-[50vh] w-screen bg-center opacity-30 ${className}`}
+	class={`wrapper pattern-bg right-1/2 left-1/2 mt-16 mr-[-50vw] ml-[-50vw] h-[50vh] w-screen bg-center opacity-50 ${className}`}
 	id="wrapper"
 >
 	<div

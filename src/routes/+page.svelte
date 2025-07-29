@@ -137,14 +137,7 @@
 		<div class="flex flex-col justify-between gap-2">
 			<p class="text-path">~/../skills</p>
 			<div class="flex flex-col p-4">
-				<Terminal
-					history={['cd software-development/ && ls -a']}
-					title="software-development.bash"
-					data={cliData}
-					cwd="~"
-					user="zhal"
-					host="portofolio"
-				/>
+				<Terminal user="zhal" host="portofolio" />
 
 				<!-- <PromptContainer
 					title="Creative-visual"
