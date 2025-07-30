@@ -11,101 +11,115 @@
 	import PatternBackground from '$lib/components/PatternBackground.svelte';
 	import Terminal from '$lib/components/terminal/Terminal.svelte';
 
+	import {
+		type FullpageActivityStore,
+		Fullpage,
+		FullpageSection,
+		FullpageSlide
+	} from 'svelte-fullpage';
 	// @ts-ignore
 	let experience = [];
 	let mount = false;
+
+	let slidePerPage = 3;
+	let currentBreakPoint = 'desktop';
+
+	function updateBreakpoint() {
+		if (window.matchMedia('(max-width: 640px)').matches) {
+			slidePerPage = 1;
+			currentBreakPoint = 'mobile';
+		} else if (window.matchMedia('(max-width: 1024px)').matches) {
+			slidePerPage = 2;
+			currentBreakPoint = 'tablet';
+		} else {
+			slidePerPage = 3;
+			currentBreakPoint = 'desktop';
+		}
+	}
+	let fullpageController: FullpageActivityStore;
+	let sectionController: FullpageActivityStore;
+
+	onMount(() => {
+		updateBreakpoint();
+		window.addEventListener('resize', updateBreakpoint);
+		window.fullpageController = fullpageController;
+		window.sectionController = sectionController;
+		console.info(
+			'Hey, you can access fullpage controller from console, try typing window.fullpageController or' +
+				' simply fullpageController, same for sectionController, try calling on them .goto(index) for programmatic navigation.'
+		);
+		console.log('example: fullpageController.goto(2) will scroll to third section');
+		return () => window.removeEventListener('resize', updateBreakpoint);
+	});
 
 	onMount(async () => {
 		experience = await loadJsonArray('/jsons/experience.json');
 		mount = true;
 		console.log(experience);
 	});
-
-	const cliData = [
-		{
-			name: 'backend',
-			perms: 'drwxr-xr-x',
-			count: 5,
-			owner: 'user',
-			group: 'group',
-			size: 4096,
-			date: 'Jul 27 12:00',
-			path: '../backend.bash',
-			stack: ['Node.js', 'Express', 'PostgreSQL'],
-			cwd: '~/backend'
-		},
-		{
-			name: 'frontend',
-			perms: 'drwxr-xr-x',
-			count: 3,
-			owner: 'user',
-			group: 'group',
-			size: 4096,
-			date: 'Jul 27 12:01',
-			path: '../frontend.bash',
-			stack: ['Svelte', 'Tailwind CSS', 'Vite'],
-			cwd: '~/frontend'
-		},
-		{
-			name: 'devops',
-			perms: 'drwxr-xr-x',
-			count: 4,
-			owner: 'user',
-			group: 'group',
-			size: 4096,
-			date: 'Jul 27 12:02',
-			path: '../devops.bash',
-			stack: ['Docker', 'CI/CD', 'Cloud Deploy'],
-			cwd: '~/devops'
-		}
-	];
 </script>
 
-<div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
-	<!-- title -->
-	<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
-		<div class="mx-auto w-fit">
-			<p class="text-6xl font-medium">CodeIt-deployIt</p>
-			<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
-		</div>
-
-		<div class="flex w-full flex-row justify-between">
-			{#each experience as exp}
-				<div class="flex flex-col gap-1">
-					<p class="text-sm font-medium">{exp.name}</p>
-					<p class="font-regular text-sm">
-						{exp.years}+ <span class="text-green-500">years-exp</span>
-					</p>
+<Fullpage bind:controller={fullpageController}>
+	<FullpageSection title="main">
+		<div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
+			<!-- title -->
+			<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
+				<div class="mx-auto w-fit">
+					<p class="text-6xl font-medium">CodeIt-deployIt</p>
+					<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
 				</div>
-			{/each}
-		</div>
-	</div>
-	{#if mount}
-		<PatternBackground className="z-0 top-0 absolute" />
-	{/if}
-	<!-- image -->
-	<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
-		<img src="/images/main-banner.jpg" alt="Main Banner" class="h-full w-full object-cover" />
-		<div
-			class="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-primary-900 to-primary-900/0
-			"
-		></div>
-	</div>
-</div>
 
-<div class="box-border flex min-h-0 w-full max-w-[100vw] flex-row gap-4 overflow-x-auto">
-	<div
-		class="col-start-2 row-span-5 row-start-1 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed [--pattern-fg:var(--color-gray-950)]/5 max-lg:hidden dark:[--pattern-fg:var(--color-white)]/10"
-	></div>
-	<div class="mt-15 flex w-full min-w-0 flex-col gap-10">
-		<!-- overview -->
-		<div class="flex h-[100vh] flex-col gap-5">
+				<div class="flex w-full flex-row justify-between">
+					{#each experience as exp}
+						<div class="flex flex-col gap-1">
+							<p class="text-sm font-medium">{exp.name}</p>
+							<p class="font-regular text-sm">
+								{exp.years}+ <span class="text-green-500">years-exp</span>
+							</p>
+						</div>
+					{/each}
+				</div>
+			</div>
+			{#if mount}
+				<PatternBackground className="z-0 top-0 absolute" />
+			{/if}
+			<!-- image -->
+			<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
+				<img src="/images/main-banner.jpg" alt="Main Banner" class="h-full w-full object-cover" />
+				<div
+					class="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-primary-900 to-primary-900/0"
+				></div>
+			</div>
+		</div>
+	</FullpageSection>
+
+	<!-- <div class="box-border flex min-h-0 w-full max-w-[100vw] flex-row gap-4 overflow-x-auto"> -->
+	<!-- <div
+	class="col-start-2 row-span-5 row-start-1 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed [--pattern-fg:var(--color-gray-950)]/5 max-lg:hidden dark:[--pattern-fg:var(--color-white)]/10"
+></div> -->
+
+	<!-- <div class="mt-15 flex w-full flex-col gap-8"> -->
+	<!-- overview -->
+	<FullpageSection title="overview">
+		<div class="mb-8 flex flex-col gap-10 overflow-hidden px-2 sm:px-4 md:px-8">
 			<p class="text-path">~/../overview</p>
 			<!-- <Divider /> -->
-			<div class="flex h-auto flex-row items-center justify-center gap-2 px-4">
-				<div class="flex w-1/2 items-center justify-center bg-primary-700 p-10">?</div>
-				<p class="w-1/2 flex-grow text-sm text-white/70">
-					Hi, <span class="text-highlight">I'm Zhall </span> — a passionate
+			<div class="flex h-auto flex-col items-center justify-center gap-4 md:h-[40vh] md:flex-row">
+				<div class="flex h-[200px] w-full md:h-full md:w-1/2">
+					<img
+						src="/images/overview-illustration.png"
+						alt="Overview Illustration"
+						class="h-full w-full [mask-image:linear-gradient(to_bottom,var(--color-primary-900)_0%,transparent)] object-cover"
+						style="object-position: right 10%;"
+					/>
+				</div>
+
+				<div class="mt-4 w-full text-justify text-xs text-white/70 md:mt-0 md:w-1/2">
+					<p class="mb-2 text-lg md:text-xl">
+						Hi, <span class="text-highlight">I'm Zhall </span>
+					</p>
+					<!-- <span class="text-3xl font-bold">"</span> -->
+					— a passionate
 					<span class="text-highlight">Application Developer</span>
 					with over a year of professional experience in building
 					<span class="text-highlight">web, mobile, and backend solutions</span>. I specialize in
@@ -121,19 +135,21 @@
 					<span class="text-highlight">new technologies</span>
 					and better ways to build
 					<span class="text-highlight">impactful digital experiences</span>.
-				</p>
+					<!-- <span class="text-3xl font-bold">"</span> -->
+				</div>
 			</div>
-			<Carousel autoplay={2000} perPage={3} className="flex-grow bg-amber-200">
-				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
-				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
-				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
-				<div class="h-100 w-[250px] flex-1 bg-primary-200"></div>
+			<!-- <Carousel autoplay={2000} perPage={slidePerPage} className="h-100">
+				<div class="h-60 w-full flex-1 bg-primary-200 md:w-[250px]"></div>
+				<div class="h-60 w-full flex-1 bg-primary-200 md:w-[250px]"></div>
+				<div class="h-60 w-full flex-1 bg-primary-200 md:w-[250px]"></div>
+				<div class="h-60 w-full flex-1 bg-primary-200 md:w-[250px]"></div>
 				<span class="display:inline;margin-top:6rem;" slot="left-control">Left</span>
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
-			</Carousel>
+			</Carousel> -->
 		</div>
-
-		<!-- skills -->
+	</FullpageSection>
+	<!-- skills -->
+	<FullpageSection title="skills">
 		<div class="flex flex-col justify-between gap-2">
 			<p class="text-path">~/../skills</p>
 			<div class="flex flex-col p-4">
@@ -163,8 +179,10 @@
 				</PromptContainer> -->
 			</div>
 		</div>
+	</FullpageSection>
 
-		<!-- clients -->
+	<!-- clients -->
+	<FullpageSection title="clients">
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">../clients</p>
 			<Carousel autoplay={2000} perPage={3}>
@@ -195,8 +213,10 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
+	</FullpageSection>
 
-		<!-- projects -->
+	<!-- projects -->
+	<FullpageSection title="projects">
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">~/../Projects</p>
 			<Carousel autoplay={0} perPage={3} rtl>
@@ -231,7 +251,9 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
-		<!-- clients -->
+	</FullpageSection>
+	<!-- clients -->
+	<FullpageSection title="clients">
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">~/../clients</p>
 			<Carousel autoplay={2000} perPage={3}>
@@ -262,9 +284,10 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
-	</div>
-</div>
-
+	</FullpageSection>
+	<!-- </div> -->
+	<!-- </div> -->
+</Fullpage>
 <!-- end content -->
 
 <div class="flex flex-col gap-4">
@@ -334,3 +357,13 @@
 		</div>
 	</div>
 </div>
+
+<style global>
+	:global(body) {
+		height: 100vh;
+	}
+	ul.svelte-fp-slide-indicator > li > button > i {
+		background-color: #fff;
+		border: 1px solid #000;
+	}
+</style>

@@ -189,8 +189,8 @@
 </script>
 
 <div
-	class="card-hovering mx-auto w-full rounded-xl border border-primary-50 bg-primary-900 shadow-lg"
-	style="font-family: 'Fira Code', monospace;"
+	class="card-hovering mx-auto w-full overflow-auto rounded-xl border border-primary-50 bg-primary-900 shadow-lg"
+	style="font-family: 'Fira Code', monospace; max-height: 600px;"
 >
 	<!-- Header bar -->
 	<div

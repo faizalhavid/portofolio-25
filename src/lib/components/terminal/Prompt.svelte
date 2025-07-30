@@ -5,6 +5,7 @@
 	export let cmd: string = '';
 	export let color: string = 'green';
 	export let pulse: boolean = true;
+	export let placeholder: string = 'Type a command...';
 	export let onEnter: (value: string) => void = () => {};
 	let input: string = '';
 
@@ -23,10 +24,11 @@
 		<span class="relative flex items-center">
 			<div class="relative flex items-center">
 				<input
-					class="flex-1 border-none bg-transparent pr-2 text-white outline-none"
+					class="flex-1 border-none bg-transparent pr-2 text-white outline-none focus:border-b-2 focus:border-white focus:ring-0"
 					bind:value={input}
 					on:keydown={handleKeydown}
 					autocomplete="off"
+					{placeholder}
 				/>
 				<!-- <span
 					class="absolute top-1/2 left-2 h-6 w-2 -translate-y-1/2 animate-pulse bg-white"
