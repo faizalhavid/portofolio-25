@@ -10,19 +10,53 @@
 	import { onMount } from 'svelte';
 	import PatternBackground from '$lib/components/PatternBackground.svelte';
 	import Terminal from '$lib/components/terminal/Terminal.svelte';
-
-	import {
-		type FullpageActivityStore,
-		Fullpage,
-		FullpageSection,
-		FullpageSlide
-	} from 'svelte-fullpage';
 	// @ts-ignore
 	let experience = [];
 	let mount = false;
+	let activeSection = '';
+	const sectionIds = ['overview', 'skills', 'client'];
 
 	let slidePerPage = 3;
 	let currentBreakPoint = 'desktop';
+	const fs = {
+		'/': {
+			type: 'dir',
+			children: {
+				'soft-dev': {
+					type: 'dir',
+					children: {
+						'nodejs.txt': { type: 'file', content: 'Node.js' },
+						'express.txt': { type: 'file', content: 'Express' },
+						'postgresql.txt': { type: 'file', content: 'PostgreSQL' },
+						'svelte.txt': { type: 'file', content: 'Svelte' },
+						'tailwindcss.txt': { type: 'file', content: 'Tailwind CSS' },
+						'vite.txt': { type: 'file', content: 'Vite' }
+					}
+				},
+				'creative-visual': {
+					type: 'dir',
+					children: {
+						'figma.txt': { type: 'file', content: 'Figma' },
+						'adobexd.txt': { type: 'file', content: 'Adobe XD' },
+						'photoshop.txt': { type: 'file', content: 'Photoshop' },
+						'illustrator.txt': { type: 'file', content: 'Illustrator' }
+					}
+				}
+			}
+		}
+	};
+
+	let terminalHandleCommand: ((cmd: string) => void) | null = null;
+
+	function handleOnMountTerminal(handleCommand: (cmd: string) => void) {
+		terminalHandleCommand = handleCommand;
+	}
+
+	$: if (activeSection === 'skills' && terminalHandleCommand) {
+		['cd soft-dev && ls -a', 'cd .. && cd creative-visual && ls -a'].forEach((cmd) =>
+			terminalHandleCommand!(cmd)
+		);
+	}
 
 	function updateBreakpoint() {
 		if (window.matchMedia('(max-width: 640px)').matches) {
@@ -35,20 +69,40 @@
 			slidePerPage = 3;
 			currentBreakPoint = 'desktop';
 		}
+		// Make it reactive
+		// $: currentBreakPoint;
 	}
-	let fullpageController: FullpageActivityStore;
-	let sectionController: FullpageActivityStore;
+
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						activeSection = entry.target.id;
+						// // Make it reactive
+						$: activeSection;
+					}
+				});
+			},
+			{
+				threshold: 1
+			}
+		);
+
+		sectionIds.forEach((id) => {
+			const el = document.getElementById(id);
+			if (el) observer.observe(el);
+		});
+
+		return () => observer.disconnect();
+	});
+
+	$: console.log('active section:', activeSection);
+	$: console.log('current breakpoint:', currentBreakPoint);
 
 	onMount(() => {
 		updateBreakpoint();
 		window.addEventListener('resize', updateBreakpoint);
-		window.fullpageController = fullpageController;
-		window.sectionController = sectionController;
-		console.info(
-			'Hey, you can access fullpage controller from console, try typing window.fullpageController or' +
-				' simply fullpageController, same for sectionController, try calling on them .goto(index) for programmatic navigation.'
-		);
-		console.log('example: fullpageController.goto(2) will scroll to third section');
 		return () => window.removeEventListener('resize', updateBreakpoint);
 	});
 
@@ -59,49 +113,43 @@
 	});
 </script>
 
-<Fullpage bind:controller={fullpageController}>
-	<FullpageSection title="main">
-		<div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
-			<!-- title -->
-			<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
-				<div class="mx-auto w-fit">
-					<p class="text-6xl font-medium">CodeIt-deployIt</p>
-					<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
-				</div>
-
-				<div class="flex w-full flex-row justify-between">
-					{#each experience as exp}
-						<div class="flex flex-col gap-1">
-							<p class="text-sm font-medium">{exp.name}</p>
-							<p class="font-regular text-sm">
-								{exp.years}+ <span class="text-green-500">years-exp</span>
-							</p>
-						</div>
-					{/each}
-				</div>
-			</div>
-			{#if mount}
-				<PatternBackground className="z-0 top-0 absolute" />
-			{/if}
-			<!-- image -->
-			<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
-				<img src="/images/main-banner.jpg" alt="Main Banner" class="h-full w-full object-cover" />
-				<div
-					class="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-primary-900 to-primary-900/0"
-				></div>
-			</div>
+<div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
+	<!-- title -->
+	<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
+		<div class="mx-auto w-fit">
+			<p class="text-6xl font-medium">CodeIt-deployIt</p>
+			<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
 		</div>
-	</FullpageSection>
 
-	<!-- <div class="box-border flex min-h-0 w-full max-w-[100vw] flex-row gap-4 overflow-x-auto"> -->
-	<!-- <div
-	class="col-start-2 row-span-5 row-start-1 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed [--pattern-fg:var(--color-gray-950)]/5 max-lg:hidden dark:[--pattern-fg:var(--color-white)]/10"
-></div> -->
+		<div class="flex w-full flex-row justify-between">
+			{#each experience as exp}
+				<div class="flex flex-col gap-1">
+					<p class="text-sm font-medium">{exp.name}</p>
+					<p class="font-regular text-sm">
+						{exp.years}+ <span class="text-green-500">years-exp</span>
+					</p>
+				</div>
+			{/each}
+		</div>
+	</div>
+	{#if mount}
+		<PatternBackground className="z-0 top-0 absolute" />
+	{/if}
+	<!-- image -->
+	<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
+		<img src="/images/main-banner.jpg" alt="Main Banner" class="h-full w-full object-cover" />
+		<div
+			class="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-primary-900 to-primary-900/0"
+		></div>
+	</div>
+</div>
 
-	<!-- <div class="mt-15 flex w-full flex-col gap-8"> -->
-	<!-- overview -->
-	<FullpageSection title="overview">
-		<div class="mb-8 flex flex-col gap-10 overflow-hidden px-2 sm:px-4 md:px-8">
+<div class="box-border flex min-h-0 w-full max-w-[100vw] flex-row gap-8 overflow-x-auto">
+	<div
+		class="col-start-2 row-span-5 row-start-1 border-x border-x-(--pattern-fg) bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed [--pattern-fg:var(--color-gray-950)]/5 max-lg:hidden dark:[--pattern-fg:var(--color-white)]/10"
+	></div>
+	<div class="mt-15 flex w-full min-w-0 flex-col gap-10">
+		<div id="overview" class="mb-8 flex flex-col gap-10 overflow-hidden px-2 sm:px-4 md:px-8">
 			<p class="text-path">~/../overview</p>
 			<!-- <Divider /> -->
 			<div class="flex h-auto flex-col items-center justify-center gap-4 md:h-[40vh] md:flex-row">
@@ -147,42 +195,14 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel> -->
 		</div>
-	</FullpageSection>
-	<!-- skills -->
-	<FullpageSection title="skills">
-		<div class="flex flex-col justify-between gap-2">
+
+		<div id="skills" class="flex flex-col justify-between gap-2">
 			<p class="text-path">~/../skills</p>
 			<div class="flex flex-col p-4">
-				<Terminal user="zhal" host="portofolio" />
-
-				<!-- <PromptContainer
-					title="Creative-visual"
-					className="my-4"
-					command={['run ls -a creative-visual/']}
-				> -->
-				<!-- <div class="flex gap-2">
-					<button class={`mr-1 rounded border bg-gray-800 px-2 py-0.5 text-xs text-white`}>
-						../backend.bash
-					</button>
-					<button class={`mr-1 rounded border bg-gray-800 px-2 py-0.5 text-xs text-white`}>
-						../frontend.bash
-					</button>
-					<button class={`rounded border bg-gray-800 px-2 py-0.5 text-xs text-white`}>
-						../devops.bash
-					</button>
-				</div> -->
-				<!-- <ul class="list-disc pl-5">
-						<li>Skill 1</li>
-						<li>Skill 2</li>
-						<li>Skill 3</li>
-					</ul>
-				</PromptContainer> -->
+				<Terminal user="zhal" host="portofolio" {fs} handleOnMount={handleOnMountTerminal} />
 			</div>
 		</div>
-	</FullpageSection>
 
-	<!-- clients -->
-	<FullpageSection title="clients">
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">../clients</p>
 			<Carousel autoplay={2000} perPage={3}>
@@ -213,10 +233,7 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
-	</FullpageSection>
 
-	<!-- projects -->
-	<FullpageSection title="projects">
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">~/../Projects</p>
 			<Carousel autoplay={0} perPage={3} rtl>
@@ -251,9 +268,7 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
-	</FullpageSection>
-	<!-- clients -->
-	<FullpageSection title="clients">
+
 		<div class="mx-auto flex w-full flex-col gap-4">
 			<p class="text-path">~/../clients</p>
 			<Carousel autoplay={2000} perPage={3}>
@@ -284,10 +299,9 @@
 				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
 			</Carousel>
 		</div>
-	</FullpageSection>
-	<!-- </div> -->
-	<!-- </div> -->
-</Fullpage>
+	</div>
+</div>
+
 <!-- end content -->
 
 <div class="flex flex-col gap-4">

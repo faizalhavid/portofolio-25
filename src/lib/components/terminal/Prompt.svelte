@@ -9,34 +9,48 @@
 	export let onEnter: (value: string) => void = () => {};
 	let input: string = '';
 
+	let showCursor = true;
+	let cursorInterval: any;
+
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
 			onEnter(input);
 			input = '';
 		}
 	}
+
+	$: if (pulse) {
+		clearInterval(cursorInterval);
+		cursorInterval = setInterval(() => {
+			showCursor = !showCursor;
+		}, 500);
+	} else {
+		clearInterval(cursorInterval);
+		showCursor = true;
+	}
+
+	import { onDestroy } from 'svelte';
+	import { fade } from 'svelte/transition';
+
+	onDestroy(() => clearInterval(cursorInterval));
 </script>
 
-<div class="mt-4 flex items-center gap-2">
+<div class="mt-4 flex items-center gap-2" transition:fade={{ duration: 400 }}>
 	<span class="text-green-400">{user}@{host}</span>
 	<span class="text-blue-400">{cwd} $</span>
 	{#if pulse}
-		<span class="relative flex items-center">
-			<div class="relative flex items-center">
-				<input
-					class="flex-1 border-none bg-transparent pr-2 text-white outline-none focus:border-b-2 focus:border-white focus:ring-0"
-					bind:value={input}
-					on:keydown={handleKeydown}
-					autocomplete="off"
-					{placeholder}
-				/>
-				<!-- <span
-					class="absolute top-1/2 left-2 h-6 w-2 -translate-y-1/2 animate-pulse bg-white"
-					style="pointer-events: none;"
-				></span> -->
-			</div>
-		</span>
+		<input
+			class="flex-1 border-none bg-transparent pr-2 text-white outline-none focus:border-b-2 focus:border-white focus:ring-0"
+			bind:value={input}
+			on:keydown={handleKeydown}
+			autocomplete="off"
+			{placeholder}
+			style="caret-color: {showCursor ? 'white' : 'transparent'};"
+			transition:fade={{ duration: 400 }}
+		/>
 	{:else}
-		<span class={`${color ?? 'text-green-400'}`}>{`${cmd}`}</span>
+		<span class={`${color ?? 'text-green-400'}`} transition:fade={{ duration: 400 }}
+			>{`${cmd}`}</span
+		>
 	{/if}
 </div>

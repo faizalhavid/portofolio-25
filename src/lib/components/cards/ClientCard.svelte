@@ -1,10 +1,12 @@
 <script lang="ts">
+	import Chip from '../Chip.svelte';
 	import Divider from '../Divider.svelte';
 
 	export let name: string = '';
 	export let description: string = '';
 	export let externalLink: string = '';
 	export let avatar: string = '';
+	export let tags: string[] = ['tag1', 'tag2'];
 	export let image: string = '';
 
 	let bg = () => {
@@ -39,10 +41,16 @@
 				</div>
 			{/if}
 		</div>
+		<div class="my-2 flex flex-row gap-2">
+			{#each tags as tag}
+				<Chip text={tag} size="small" color="bg-white/30" className="backdrop-blur-md" />
+			{/each}
+		</div>
 		<p class="text-xs text-neutral-600 dark:text-neutral-400">{description}</p>
-		<div class="flex-1"></div>
 		{#if externalLink}
-			<button class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+			<button
+				class="mt-6 w-1/2 rounded-xl bg-white/30 p-1 font-sans text-sm font-medium backdrop-blur-3xl"
+			>
 				<a href={externalLink}>Visit Website</a>
 			</button>
 		{/if}
