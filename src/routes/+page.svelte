@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ClientsCard from '$lib/components/cards/ClientCard.svelte';
 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
+	import ProjectGallery from '$lib/components/ProjectGallery.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
 	import Chip from '$lib/components/Chip.svelte';
 	import Divider from '$lib/components/Divider.svelte';
@@ -10,8 +11,10 @@
 	import { onMount } from 'svelte';
 	import PatternBackground from '$lib/components/PatternBackground.svelte';
 	import Terminal from '$lib/components/terminal/Terminal.svelte';
+	import SkillsBubble from '$lib/components/SkillsBubble.svelte';
+
 	// @ts-ignore
-	let experience = [];
+	let experience: any[] | null | undefined = [];
 	let mount = false;
 	let activeSection = '';
 	const sectionIds = ['overview', 'skills', 'client'];
@@ -111,29 +114,168 @@
 		mount = true;
 		console.log(experience);
 	});
+
+	// Projects data
+	const projectsData = [
+		{
+			name: 'E-Commerce Platform',
+			description:
+				'A full-featured e-commerce platform with real-time inventory, payment integration, and advanced analytics dashboard.',
+			externalLink: 'https://example.com',
+			image: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?q=80&w=1470',
+			techStack: ['React', 'Node.js', 'PostgreSQL', 'Redis', 'Stripe'],
+			category: 'Full-Stack',
+			size: 'large'
+		},
+		{
+			name: 'AI Chat Assistant',
+			description:
+				'Intelligent chatbot powered by machine learning for customer support automation.',
+			externalLink: 'https://example.com',
+			image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1470',
+			techStack: ['Python', 'TensorFlow', 'FastAPI', 'React'],
+			category: 'AI/ML',
+			size: 'small'
+		},
+		{
+			name: 'Task Manager Pro',
+			description: 'Collaborative task management tool with real-time updates and team analytics.',
+			externalLink: 'https://example.com',
+			techStack: ['Vue.js', 'Firebase', 'Tailwind CSS'],
+			category: 'Web App',
+			size: 'small'
+		},
+		{
+			name: 'Portfolio CMS',
+			description: 'Headless CMS for managing portfolio content with a beautiful admin interface.',
+			externalLink: 'https://example.com',
+			image: 'https://images.unsplash.com/photo-1753248845864-878296d03789?q=80&w=1470',
+			techStack: ['Svelte', 'SvelteKit', 'Supabase'],
+			category: 'CMS',
+			size: 'small'
+		},
+		{
+			name: 'Mobile Fitness App',
+			description: 'Cross-platform fitness tracking app with workout plans and nutrition guidance.',
+			externalLink: 'https://example.com',
+			techStack: ['React Native', 'Expo', 'MongoDB', 'Express'],
+			category: 'Mobile',
+			size: 'medium'
+		},
+		{
+			name: 'DevOps Dashboard',
+			description:
+				'Real-time monitoring dashboard for cloud infrastructure and deployment pipelines.',
+			externalLink: 'https://example.com',
+			techStack: ['Next.js', 'Docker', 'Kubernetes', 'Grafana'],
+			category: 'DevOps',
+			size: 'small'
+		}
+	];
+
+	// Skills data
+	const skillsData = [
+		// Languages (Cyan)
+		{ name: 'JavaScript', size: 'xl', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'TypeScript', size: 'xl', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'Python', size: 'lg', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'Java', size: 'md', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'PHP', size: 'md', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'C#', size: 'sm', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'Go', size: 'sm', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'SQL', size: 'md', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'HTML', size: 'lg', color: 'rgb(6,182,212)', category: 'Languages' },
+		{ name: 'CSS', size: 'lg', color: 'rgb(6,182,212)', category: 'Languages' },
+
+		// Frameworks (Purple)
+		{ name: 'React', size: 'xl', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Vue.js', size: 'lg', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Svelte', size: 'lg', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Next.js', size: 'md', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Node.js', size: 'xl', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Express', size: 'md', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'NestJS', size: 'sm', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Django', size: 'md', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Flask', size: 'sm', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Spring Boot', size: 'sm', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Laravel', size: 'md', color: 'rgb(168,85,247)', category: 'Frameworks' },
+		{ name: 'Tailwind CSS', size: 'lg', color: 'rgb(168,85,247)', category: 'Frameworks' },
+
+		// Tools (Blue)
+		{ name: 'Git', size: 'lg', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'VS Code', size: 'md', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'Postman', size: 'md', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'Webpack', size: 'sm', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'Vite', size: 'md', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'npm', size: 'sm', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'REST API', size: 'lg', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'GraphQL', size: 'md', color: 'rgb(59,130,246)', category: 'Tools' },
+		{ name: 'Prisma', size: 'sm', color: 'rgb(59,130,246)', category: 'Tools' },
+
+		// Design (Pink)
+		{ name: 'Figma', size: 'lg', color: 'rgb(236,72,153)', category: 'Design' },
+		{ name: 'Adobe XD', size: 'md', color: 'rgb(236,72,153)', category: 'Design' },
+		{ name: 'Photoshop', size: 'md', color: 'rgb(236,72,153)', category: 'Design' },
+		{ name: 'Illustrator', size: 'sm', color: 'rgb(236,72,153)', category: 'Design' },
+		{ name: 'Sketch', size: 'sm', color: 'rgb(236,72,153)', category: 'Design' },
+		{ name: 'UI/UX', size: 'lg', color: 'rgb(236,72,153)', category: 'Design' },
+
+		// DevOps (Green)
+		{ name: 'Docker', size: 'lg', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'Kubernetes', size: 'md', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'AWS', size: 'lg', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'Azure', size: 'sm', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'CI/CD', size: 'md', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'Jenkins', size: 'sm', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'Nginx', size: 'sm', color: 'rgb(34,197,94)', category: 'DevOps' },
+		{ name: 'Linux', size: 'md', color: 'rgb(34,197,94)', category: 'DevOps' }
+	];
 </script>
 
-<div class="flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
+<div class="bg relative flex max-h-[100vh] min-h-0 flex-col overflow-y-clip">
 	<!-- title -->
-	<div class="z-10 flex flex-col gap-5 px-25 pt-[15rem]">
-		<div class="mx-auto w-fit">
-			<p class="text-6xl font-medium">CodeIt-deployIt</p>
-			<p class="mt-4 ml-40 text-6xl font-medium">DesignIt-renderIt</p>
+	<div class="z-10 flex flex-col gap-8 px-6 pt-[12rem] sm:px-12 lg:px-25">
+		<div class="mx-auto w-full max-w-5xl">
+			<div class="mx-auto w-fit">
+				<p
+					class="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-6xl font-medium text-transparent"
+				>
+					CodeIt-deployIt
+				</p>
+				<p
+					class="mt-4 ml-40 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 bg-clip-text text-6xl font-medium text-transparent"
+				>
+					DesignIt-renderIt
+				</p>
+			</div>
+			<p class="mt-6 max-w-2xl text-center text-sm text-cyan-300/70 sm:text-base lg:text-lg">
+				Full-stack developer & creative designer crafting digital experiences
+			</p>
 		</div>
 
-		<div class="flex w-full flex-row justify-between">
+		<div class="mx-auto mt-8 grid w-full max-w-5xl grid-cols-2 gap-4 sm:grid-cols-4">
 			{#each experience as exp}
-				<div class="flex flex-col gap-1">
-					<p class="text-sm font-medium">{exp.name}</p>
-					<p class="font-regular text-sm">
-						{exp.years}+ <span class="text-green-500">years-exp</span>
-					</p>
+				<div
+					class="group relative overflow-hidden rounded-lg border border-cyan-500/20 bg-gradient-to-br from-cyan-950/30 to-purple-950/30 p-4 backdrop-blur-sm transition-all duration-300 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+				>
+					<div class="flex flex-col gap-2">
+						<p class="text-xs font-medium tracking-wider text-cyan-400/70 uppercase sm:text-sm">
+							{exp.name}
+						</p>
+						<p class="text-xl font-bold text-cyan-100 sm:text-2xl">
+							{exp.years}<span class="text-base font-normal text-green-400">+</span>
+						</p>
+						<p class="text-xs text-green-400">years experience</p>
+					</div>
+					<div
+						class="absolute top-0 right-0 h-full w-1 bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+					></div>
 				</div>
 			{/each}
 		</div>
 	</div>
 	{#if mount}
-		<PatternBackground className="z-0 top-0 absolute" />
+		<PatternBackground className="z-0 top-0 left-0 absolute w-full h-full" />
 	{/if}
 	<!-- image -->
 	<div class="relative right-1/2 left-1/2 mr-[-50vw] ml-[-50vw] w-screen flex-grow">
@@ -150,7 +292,7 @@
 	></div>
 	<div class="mt-15 flex w-full min-w-0 flex-col gap-10">
 		<div id="overview" class="mb-8 flex flex-col gap-10 overflow-hidden px-2 sm:px-4 md:px-8">
-			<p class="text-path">~/../overview</p>
+			<p class="text-path text-cyan-400">~/../overview</p>
 			<!-- <Divider /> -->
 			<div class="flex h-auto flex-col items-center justify-center gap-4 md:h-[40vh] md:flex-row">
 				<div class="flex h-[200px] w-full md:h-full md:w-1/2">
@@ -197,14 +339,14 @@
 		</div>
 
 		<div id="skills" class="flex flex-col justify-between gap-2">
-			<p class="text-path">~/../skills</p>
+			<p class="text-path text-cyan-400">~/../skills</p>
 			<div class="flex flex-col p-4">
-				<Terminal user="zhal" host="portofolio" {fs} handleOnMount={handleOnMountTerminal} />
+				<SkillsBubble skills={skillsData} />
 			</div>
 		</div>
 
 		<div class="mx-auto flex w-full flex-col gap-4">
-			<p class="text-path">../clients</p>
+			<p class="text-path text-cyan-400">../clients</p>
 			<Carousel autoplay={2000} perPage={3}>
 				<ClientsCard
 					name="Client 1"
@@ -234,39 +376,17 @@
 			</Carousel>
 		</div>
 
-		<div class="mx-auto flex w-full flex-col gap-4">
-			<p class="text-path">~/../Projects</p>
-			<Carousel autoplay={0} perPage={3} rtl>
-				<ProjectCard
-					name="Project 1"
-					description="Description for Project 1"
-					externalLink="https://example.com"
-					image="https://images.unsplash.com/photo-1753248845864-878296d03789?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-					techStack={['HTML', 'CSS', 'JavaScript']}
-				/>
-
-				<ProjectCard
-					name="Project 2"
-					description="Description for Project 2"
-					externalLink="https://example.com"
-					techStack={['HTML', 'CSS', 'JavaScript']}
-				/>
-
-				<ProjectCard
-					name="Project 3"
-					description="Description for Project 3"
-					externalLink="https://example.com"
-					techStack={['HTML', 'CSS', 'JavaScript']}
-				/>
-				<ProjectCard
-					name="Project 3"
-					description="Description for Project 3"
-					externalLink="https://example.com"
-					techStack={['HTML', 'CSS', 'JavaScript']}
-				/>
-				<span class="display:inline;margin-top:6rem;" slot="left-control">Left</span>
-				<span class="display:inline;margin-top:6rem;" slot="right-control">Right</span>
-			</Carousel>
+		<div class="mx-auto flex w-full flex-col gap-6">
+			<div class="flex items-center gap-3">
+				<div class="h-px w-8 bg-gradient-to-r from-transparent to-cyan-500"></div>
+				<p class="text-path font-mono text-lg font-semibold text-cyan-400">~/../projects</p>
+				<div class="h-px flex-1 bg-gradient-to-r from-cyan-500 to-transparent"></div>
+			</div>
+			<div
+				class="overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-950/20 via-purple-950/20 to-cyan-950/20 p-6 backdrop-blur-sm"
+			>
+				<ProjectGallery projects={projectsData} />
+			</div>
 		</div>
 
 		<div class="mx-auto flex w-full flex-col gap-4">
@@ -311,45 +431,55 @@
 	</div>
 
 	<div class="mx-auto flex w-full flex-col gap-4">
-		<p class="text-path">../Connect-with-me</p>
+		<p class="text-path text-cyan-400">../Connect-with-me</p>
 		<Marquee speed={20} gap="5px" pauseOnHover>
-			<Chip text="email@mail.com" color="bg-blue-200" textColor="text-blue-800" className="mr-2" />
+			<Chip
+				text="email@mail.com"
+				color="bg-cyan-500/20"
+				textColor="text-cyan-300"
+				className="mr-2 border border-cyan-500/30"
+			/>
 			<Chip
 				text="github.com/username"
-				color="bg-gray-200"
-				textColor="text-gray-700"
-				className="mr-2"
+				color="bg-purple-500/20"
+				textColor="text-purple-300"
+				className="mr-2 border border-purple-500/30"
 			/>
 			<Chip
 				text="linkedin.com/in/username"
-				color="bg-blue-200"
-				textColor="text-blue-800"
-				className="mr-2"
+				color="bg-blue-500/20"
+				textColor="text-blue-300"
+				className="mr-2 border border-blue-500/30"
 			/>
 			<Chip
 				text="twitter.com/username"
-				color="bg-blue-200"
-				textColor="text-blue-800"
-				className="mr-2"
+				color="bg-cyan-500/20"
+				textColor="text-cyan-300"
+				className="mr-2 border border-cyan-500/30"
 			/>
-			<Chip text="email@mail.com" color="bg-blue-200" textColor="text-blue-800" className="mr-2" />
+			<Chip
+				text="email@mail.com"
+				color="bg-cyan-500/20"
+				textColor="text-cyan-300"
+				className="mr-2 border border-cyan-500/30"
+			/>
 			<Chip
 				text="github.com/username"
-				color="bg-gray-200"
-				textColor="text-gray-700"
-				className="mr-2"
+				color="bg-purple-500/20"
+				textColor="text-purple-300"
+				className="mr-2 border border-purple-500/30"
 			/>
 			<Chip
 				text="linkedin.com/in/username"
-				color="bg-blue-200"
-				textColor="text-blue-800"
-				className="mr-2"
+				color="bg-blue-500/20"
+				textColor="text-blue-300"
+				className="mr-2 border border-blue-500/30"
 			/>
 			<Chip
 				text="twitter.com/username"
-				color="bg-blue-200"
-				textColor="text-blue-800"
-				className="mr-2"
+				color="bg-cyan-500/20"
+				textColor="text-cyan-300"
+				className="mr-2 border border-cyan-500/30"
 			/>
 		</Marquee>
 	</div>
@@ -363,11 +493,21 @@
 		<p class="text-sm">Built with Svelte and Tailwind CSS</p>
 		<p class="text-sm">Follow me on social media!</p>
 		<div class="flex gap-4">
-			<a href="aaaa" class="text-blue-400 hover:underline">GitHub</a>
-			<a href="aaaa" class="text-blue-400 hover:underline">LinkedIn</a>
-			<a href="aaaa" class="text-blue-400 hover:underline">Twitter</a>
-			<a href="aaaa" class="text-blue-400 hover:underline">Instagram</a>
-			<a href="aaaa" class="text-blue-400 hover:underline">Facebook</a>
+			<a href="aaaa" class="text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
+				>GitHub</a
+			>
+			<a href="aaaa" class="text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
+				>LinkedIn</a
+			>
+			<a href="aaaa" class="text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
+				>Twitter</a
+			>
+			<a href="aaaa" class="text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
+				>Instagram</a
+			>
+			<a href="aaaa" class="text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
+				>Facebook</a
+			>
 		</div>
 	</div>
 </div>
